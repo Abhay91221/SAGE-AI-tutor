@@ -29,7 +29,7 @@ const starters = [
 ];
 
 function TutorPage() {
-  const [topic, setTopic] = useState(topics[0]);
+  const [topic, setTopic] = useState<string>("The structure of an atom");
   const [level, setLevel] = useState<Level>("Beginner");
   const [mode, setMode] = useState<Mode>("Explain");
   const [messages, setMessages] = useState<Message[]>([]);
