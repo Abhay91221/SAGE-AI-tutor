@@ -1,9 +1,9 @@
 # Aether Tutor
 
-AI Tutor Agent	
+AI Tutor Agent
 
 Teaches academic concepts interactively, answers questions, and adapts explanations to the learner's level.  
-make smooth transition  and 3d object
+make smooth transition and 3d object
 
 This project was built with [Lovable](https://lovable.dev).
 
