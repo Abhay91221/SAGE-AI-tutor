@@ -242,9 +242,127 @@ CRITICAL RULES:
     citations: string[],
   ): string {
     const citationNote = citations.length > 0 ? ` (based on notes in ${citations[0]})` : "";
+    const topicLower = topic.toLowerCase();
+
+    // Custom fallback explanations for the 10 core ML & AI topics
+    if (topicLower.includes("linear & logistic") || topicLower.includes("logistic regression")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Linear & Logistic Regression** (${level} level)${citationNote}:\n\n*Question:* If you are predicting whether a student passes or fails an exam, which model should you choose (Linear or Logistic Regression) and why?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Linear & Logistic Regression** (${level} level)${citationNote}:\n\n💡 *Hint:* Linear Regression fits a continuous trend line ($-\\infty$ to $+\\infty$), while Logistic Regression applies a Sigmoid function $\\sigma(z) = \\frac{1}{1 + e^{-z}}$ to output probabilities ($0$ to $1$).`;
+      }
+      if (mode === "Real-Life Analogy") {
+        return `Think of **Linear Regression** as drawing a straight trend line through house sizes to estimate their dollar prices (continuous value). Think of **Logistic Regression** as a credit approval desk that turns applicant scores into a Yes/No approval probability between 0% and 100% using a Sigmoid curve! Does that distinction make sense?`;
+      }
+      if (mode === "Show Formula") {
+        return `Here are the core mathematical equations for **Linear & Logistic Regression**:\n\n- **Linear Regression:** $y = \\beta_0 + \\beta_1 x + \\epsilon$ (outputs continuous numbers $-\\infty$ to $+\\infty$)\n- **Logistic Regression:** $p = \\sigma(z) = \\frac{1}{1 + e^{-z}}$, where $z = \\mathbf{w}^T \\mathbf{x} + b$ (outputs probabilities $p \\in (0,1)$)\n\n*Check:* What happens to $\\sigma(z)$ when $z$ becomes very large and positive?`;
+      }
+      return `Here is the explanation for **Linear & Logistic Regression** (${level} level)${citationNote}:\n\n- **Linear Regression:** Fits a straight line to predict **continuous numbers** (e.g., predicting house prices, temperature, or salary).\n- **Logistic Regression:** Applies a **sigmoid function** $\\sigma(z) = \\frac{1}{1 + e^{-z}}$ to predict **binary probabilities** (0 or 1, e.g., spam vs. not spam, pass vs. fail).\n\n*Check for understanding:* If you are predicting whether a student passes or fails an exam, which model should you choose and why?`;
+    }
+
+    if (topicLower.includes("bias-variance")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on the **Bias-Variance Tradeoff** (${level} level)${citationNote}:\n\n*Question:* If your model gets 99% accuracy on training data but only 55% on test data, does it suffer from High Bias or High Variance?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for the **Bias-Variance Tradeoff** (${level} level)${citationNote}:\n\n💡 *Hint:* High Bias stems from an oversimplified model (underfitting), whereas High Variance stems from an overcomplicated model memorizing training noise (overfitting).`;
+      }
+      if (mode === "Real-Life Analogy") {
+        return `Imagine taking an exam! **High Bias** is like a student who only studied 1 page and guesses 'C' for every question—too simple, fails everywhere (**underfitting**). **High Variance** is like a student who memorized the practice test font and typos word-for-word—gets 100% on practice but fails on new exam questions (**overfitting**). We want the sweet spot in the middle!`;
+      }
+      return `Here is the breakdown of the **Bias-Variance Tradeoff** (${level} level)${citationNote}:\n\n- **High Bias (Underfitting):** The model is **too simple** to capture underlying patterns (e.g., fitting a straight line to complex curved data).\n- **High Variance (Overfitting):** The model is **overly complex** and memorizes training noise instead of generalizing to unseen test data.\n- **Goal:** Minimize Total Error = $\\text{Bias}^2 + \\text{Variance} + \\text{Irreducible Error}$.\n\n*Check for understanding:* If your model gets 99% accuracy on training data but only 55% on test data, does it suffer from High Bias or High Variance?`;
+    }
+
+    if (topicLower.includes("gradient descent")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Gradient Descent** (${level} level)${citationNote}:\n\n*Question:* What happens if the learning rate $\\alpha$ is set too large during gradient descent optimization?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Gradient Descent** (${level} level)${citationNote}:\n\n💡 *Hint:* The gradient vector $\\nabla J(\\theta)$ points in the direction of steepest loss increase, so parameters are updated by stepping downhill: $\\theta := \\theta - \\alpha \\nabla J(\\theta)$.`;
+      }
+      if (mode === "Show Formula") {
+        return `Here is the parameter update equation for **Gradient Descent**:\n\n$$\\theta_{j} := \\theta_{j} - \\alpha \\frac{\\partial}{\\partial \\theta_{j}} J(\\theta)$$\n\n- $\\theta_j$: Weight parameter\n- $\\alpha$: Learning rate (step size)\n- $J(\\theta)$: Cost/Loss function (e.g., Mean Squared Error)\n\n*Check:* Why do we subtract the gradient instead of adding it?`;
+      }
+      return `Here is how **Gradient Descent** works (${level} level)${citationNote}:\n\n- **Concept:** An optimization algorithm that iteratively adjusts weight parameters to **minimize a model's cost/loss function**.\n- **Analogy:** Imagine standing foggy on a mountain top. You feel the slope beneath your feet and step downhill in the direction of steepest decline until reaching the lowest valley floor.\n\n*Check for understanding:* What happens if the learning rate $\\alpha$ is set too large?`;
+    }
+
+    if (topicLower.includes("evaluation metrics")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Evaluation Metrics** (${level} level)${citationNote}:\n\n*Question:* In cancer screening, is it more dangerous to have a low Precision or a low Recall?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Evaluation Metrics** (${level} level)${citationNote}:\n\n💡 *Hint:* Precision ($TP / (TP + FP)$) measures exactness to minimize false alarms, while Recall ($TP / (TP + FN)$) measures completeness to avoid missing positive cases.`;
+      }
+      return `Here is your guide to **Evaluation Metrics** (${level} level)${citationNote}:\n\n- **Accuracy:** Can fail completely on imbalanced data (e.g., predicting 99% majority class).\n- **Precision:** $\\frac{TP}{TP + FP}$ — Focuses on **avoiding False Positives** (crucial for spam detection).\n- **Recall (Sensitivity):** $\\frac{TP}{TP + FN}$ — Focuses on **avoiding False Negatives** (crucial for medical diagnostics).\n- **F1-Score:** Harmonic mean $2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}}$ balancing both.\n\n*Check for understanding:* In cancer screening, is it more dangerous to have a low Precision or a low Recall?`;
+    }
+
+    if (topicLower.includes("regularization")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Regularization** (${level} level)${citationNote}:\n\n*Question:* If you have 10,000 features and suspect 9,900 are useless noise, would you choose L1 (Lasso) or L2 (Ridge) regularization?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Regularization** (${level} level)${citationNote}:\n\n💡 *Hint:* L1 penalty ($\\lambda \\sum |w_i|$) can shrink unhelpful weights to absolute zero (feature selection), while L2 penalty ($\\lambda \\sum w_i^2$) shrinks weights smoothly toward zero.`;
+      }
+      return `Here is how **Regularization (L1 & L2)** prevents overfitting (${level} level)${citationNote}:\n\n- **L1 Regularization (Lasso):** Adds absolute penalty $\\lambda \\sum |w_i|$. Shrinks unhelpful weights **exactly to zero**, performing automatic **feature selection**.\n- **L2 Regularization (Ridge):** Adds squared penalty $\\lambda \\sum w_i^2$. Shrinks weights **close to zero**, reducing feature impact smoothly without dropping them.\n\n*Check for understanding:* If you have 10,000 features and suspect 9,900 are useless noise, would you choose L1 or L2 regularization?`;
+    }
+
+    if (topicLower.includes("ensemble methods")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Ensemble Methods** (${level} level)${citationNote}:\n\n*Question:* Which ensemble method (Random Forest or XGBoost) focuses on sequential error correction?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Ensemble Methods** (${level} level)${citationNote}:\n\n💡 *Hint:* Bagging (Random Forest) trains decision trees independently in parallel to reduce variance, while Boosting (XGBoost) trains trees sequentially to fix residual errors and lower bias.`;
+      }
+      return `Here is the difference between **Ensemble Methods** (${level} level)${citationNote}:\n\n- **Random Forest (Bagging):** Builds multiple decision trees **in parallel** independently on bootstrap sub-samples and averages their votes to **lower variance**.\n- **XGBoost (Boosting):** Builds trees **sequentially**, where each new tree is trained to fix the residual errors of prior trees to **lower bias**.\n\n*Check for understanding:* Which ensemble method focuses on sequential error correction?`;
+    }
+
+    if (topicLower.includes("feature engineering")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Feature Engineering** (${level} level)${citationNote}:\n\n*Question:* Why shouldn't we encode 'Red', 'Green', 'Blue' as 1, 2, 3 in linear models?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Feature Engineering** (${level} level)${citationNote}:\n\n💡 *Hint:* Sequential numeric values imply an ordinal magnitude relationship ($3 > 2 > 1$). Use One-Hot Encoding for nominal categorical data instead.`;
+      }
+      return `Here is the breakdown of **Feature Engineering** (${level} level)${citationNote}:\n\n- **Concept:** Modifying raw data so machine learning algorithms can interpret it effectively.\n- **Feature Scaling:** Equalizes numeric ranges (e.g., MinMax $[0,1]$ or Standard Z-Score) so large numbers like salary ($100k) don't dominate small numbers like age (25).\n- **One-Hot Encoding:** Converts categorical text (e.g. 'Red', 'Blue') into binary columns of 1s and 0s.\n\n*Check for understanding:* Why shouldn't we encode 'Red', 'Green', 'Blue' as 1, 2, 3 in linear models?`;
+    }
+
+    if (topicLower.includes("dimensionality reduction") || topicLower.includes("pca")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Dimensionality Reduction (PCA)** (${level} level)${citationNote}:\n\n*Question:* Does PCA select existing columns or create brand new projection axes?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Dimensionality Reduction (PCA)** (${level} level)${citationNote}:\n\n💡 *Hint:* PCA identifies new orthogonal axes (Principal Components) along directions of highest variance to compress feature space.`;
+      }
+      return `Here is **Dimensionality Reduction (PCA)** explained (${level} level)${citationNote}:\n\n- **Concept:** Compresses high-dimensional datasets with too many features by projecting them onto new orthogonal axes (Principal Components).\n- **Key Benefit:** Maximizes retention of dataset variance while removing noise and redundant correlations.\n\n*Check for understanding:* Does PCA select existing columns or create brand new projection axes?`;
+    }
+
+    if (topicLower.includes("clustering")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Clustering** (${level} level)${citationNote}:\n\n*Question:* Which algorithm (K-Means or DBSCAN) is better when your dataset has arbitrary ring shapes and heavy background noise?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Clustering** (${level} level)${citationNote}:\n\n💡 *Hint:* K-Means assumes spherical clusters around distance centroids, while DBSCAN groups dense regions and marks low-density points as noise.`;
+      }
+      return `Here is how **Clustering** algorithms work (${level} level)${citationNote}:\n\n- **Unsupervised Grouping:** Finds natural patterns without labeled Y targets.\n- **K-Means:** Separates data into $K$ fixed distance-based spherical clusters around centroids.\n- **DBSCAN:** Groups data based on **spatial density** and automatically isolates noise/outliers.\n\n*Check for understanding:* Which algorithm is better when your dataset has arbitrary ring shapes and heavy background noise?`;
+    }
+
+    if (topicLower.includes("transformers") || topicLower.includes("deep learning")) {
+      if (mode === "Quiz me") {
+        return `Here is a check question on **Transformers & Deep Learning** (${level} level)${citationNote}:\n\n*Question:* What key architectural component allows Transformers to process sequences in parallel instead of sequentially?\n\nTake your best shot and reply below!`;
+      }
+      if (mode === "Give Hint") {
+        return `Here is a hint for **Transformers & Deep Learning** (${level} level)${citationNote}:\n\n💡 *Hint:* Self-Attention calculates pairwise token contextual weights simultaneously rather than stepping sequentially through recurrent states.`;
+      }
+      return `Here is **Transformers & Deep Learning** explained (${level} level)${citationNote}:\n\n- **Deep Neural Networks:** Learn hierarchical representations through stacked layers of artificial neurons.\n- **Transformers:** Use **Self-Attention mechanisms** to process entire text sequences in parallel, computing contextual weights between all tokens simultaneously.\n- **Impact:** Powers modern Large Language Models (LLMs) like Gemini, ChatGPT, and Claude.\n\n*Check for understanding:* What key architectural component allows Transformers to process sequences in parallel instead of sequentially?`;
+    }
 
     if (mode === "Quiz me") {
       return `Here is a check question on **${topic}** (${level} level)${citationNote}:\n\n*Question:* Can you state the key condition or formula required for ${topic} to function properly?\n\nTake your best shot and reply below!`;
+    }
+
+    if (mode === "Give Hint") {
+      return `Here is a hint for **${topic}** (${level} level)${citationNote}:\n\n💡 *Hint:* Consider the core concept and main operational steps of ${topic}. What key constraint or trade-off applies?`;
     }
 
     if (mode === "Real-Life Analogy") {

@@ -39,8 +39,68 @@ function computeTFIDFScore(query: string, chunkText: string): number {
   return score * 10 + matchRatio * 5;
 }
 
+const CORE_HANDBOOK_TEXT = `
+Page 1
+Linear & Logistic Regression Notes:
+Linear Regression fits a straight line to predict continuous numbers (e.g., house prices or salary).
+Logistic Regression uses a sigmoid function sigma(z) = 1 / (1 + e^-z) to predict binary probabilities (0 or 1, such as spam detection or pass/fail).
+
+Page 2
+Bias-Variance Tradeoff Notes:
+High Bias causes underfitting because the model is too simple to capture patterns.
+High Variance causes overfitting because the model memorizes training noise and fails to generalize to test data.
+
+Page 3
+Gradient Descent Notes:
+Gradient Descent is an optimization algorithm that iteratively updates weight parameters to minimize a model's cost/loss function by stepping in the negative gradient direction.
+
+Page 4
+Evaluation Metrics Notes:
+Accuracy can fail on imbalanced data because predicting only the majority class yields high accuracy while missing rare positive cases.
+Use Precision (avoiding false positives), Recall (avoiding false negatives), and F1-Score (the harmonic balance of both).
+
+Page 5
+Regularization (L1 & L2) Notes:
+Prevents overfitting by penalizing large weights.
+L1 Regularization (Lasso) adds absolute penalty and shrinks weights to zero for feature selection.
+L2 Regularization (Ridge) adds squared penalty and shrinks weights close to zero to minimize feature impact smoothly.
+
+Page 6
+Ensemble Methods Notes:
+Random Forest (Bagging) builds decision trees in parallel independently to lower model variance.
+XGBoost (Boosting) builds decision trees sequentially to fix previous errors and lower model bias.
+
+Page 7
+Feature Engineering Notes:
+Modifying data so algorithms can read it effectively.
+Includes Feature Scaling (equalizing numeric ranges like MinMax or Z-Score) and One-Hot Encoding (turning text categories into binary 1s and 0s).
+
+Page 8
+Dimensionality Reduction (PCA) Notes:
+Principal Component Analysis (PCA) compresses datasets with too many features by projecting them onto new orthogonal axes, maximizing variance retention while dropping noise.
+
+Page 9
+Clustering Notes:
+Unsupervised grouping without labeled targets.
+K-Means separates data into a fixed number of K distance-based groups.
+DBSCAN groups data based on spatial density and isolates outliers.
+
+Page 10
+Transformers & Deep Learning Notes:
+Neural networks learn complex data hierarchies through multi-layer architectures.
+Transformers use self-attention mechanisms to process text sequences in parallel, powering all modern Large Language Models (LLMs).
+`;
+
 export class RAGService {
   private static materials: StudyMaterial[] = [];
+  private static initialized = false;
+
+  private static ensureInitialized() {
+    if (!RAGService.initialized) {
+      RAGService.initialized = true;
+      RAGService.processDocument("ML_AI_Core_Handbook.txt", CORE_HANDBOOK_TEXT);
+    }
+  }
 
   /**
    * Process raw uploaded text or document content into chunked study material
@@ -51,6 +111,8 @@ export class RAGService {
     chunkSize: number = 450,
     overlap: number = 60,
   ): StudyMaterial {
+    RAGService.ensureInitialized();
+
     const docId = "doc_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7);
     const cleanedText = rawText.replace(/\r\n/g, "\n").trim();
     const paragraphs = cleanedText.split(/\n\s*\n/);
@@ -112,6 +174,7 @@ export class RAGService {
    * Add pre-processed material into active search index
    */
   public static addMaterial(material: StudyMaterial) {
+    RAGService.ensureInitialized();
     const existingIdx = RAGService.materials.findIndex((m) => m.id === material.id);
     if (existingIdx >= 0) {
       RAGService.materials[existingIdx] = material;
@@ -124,6 +187,7 @@ export class RAGService {
    * Retrieve all uploaded study materials
    */
   public static getMaterials(): StudyMaterial[] {
+    RAGService.ensureInitialized();
     return RAGService.materials;
   }
 
@@ -131,6 +195,7 @@ export class RAGService {
    * Remove a study material by ID
    */
   public static removeMaterial(id: string) {
+    RAGService.ensureInitialized();
     RAGService.materials = RAGService.materials.filter((m) => m.id !== id);
   }
 
@@ -142,6 +207,7 @@ export class RAGService {
     documentId?: string,
     topK: number = 4,
   ): { chunk: DocumentChunk; score: number }[] {
+    RAGService.ensureInitialized();
     const results: { chunk: DocumentChunk; score: number }[] = [];
 
     const targetMaterials = documentId

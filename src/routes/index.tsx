@@ -80,30 +80,34 @@ type Message = {
 type ViewMode = "chat" | "materials" | "quiz" | "progress" | "plan";
 
 const topics = [
+  "Linear & Logistic Regression",
+  "Bias-Variance Tradeoff",
+  "Gradient Descent",
+  "Evaluation Metrics",
+  "Regularization (L1 & L2)",
+  "Ensemble Methods",
+  "Feature Engineering",
+  "Dimensionality Reduction (PCA)",
+  "Clustering",
+  "Transformers & Deep Learning",
   "The structure of an atom",
-  "Decision Trees & Entropy",
-  "Logistic Regression",
-  "K-Means Clustering",
-  "How photosynthesis works",
-  "Why gravity matters",
-  "The basics of calculus",
 ];
 
 const starters = [
   {
-    icon: Atom,
-    title: "Atoms & matter",
-    question: "What is an atom, and what are its subatomic parts?",
-  },
-  {
     icon: Lightbulb,
-    title: "Everyday science",
-    question: "Why is the sky blue, and how does Rayleigh scattering work?",
+    title: "Linear & Logistic Regression",
+    question: "Explain the difference between Linear and Logistic Regression, including the sigmoid function.",
   },
   {
     icon: BookOpen,
-    title: "Math & ML made simple",
-    question: "Can you explain derivatives and gradient descent with a real-life example?",
+    title: "Bias-Variance Tradeoff",
+    question: "What is the Bias-Variance Tradeoff, and how do underfitting and overfitting differ?",
+  },
+  {
+    icon: Atom,
+    title: "Transformers & LLMs",
+    question: "How do Transformers use self-attention mechanisms to process sequences and power modern LLMs?",
   },
 ];
 
@@ -135,7 +139,7 @@ const actionChips: { label: string; mode: Mode; text: string }[] = [
 
 function TutorPage() {
   const [activeView, setActiveView] = useState<ViewMode>("chat");
-  const [topic, setTopic] = useState<string>("The structure of an atom");
+  const [topic, setTopic] = useState<string>("Linear & Logistic Regression");
   const [level, setLevel] = useState<Level>("Beginner");
   const [mode, setMode] = useState<Mode>("Explain");
   const [messages, setMessages] = useState<Message[]>([]);
