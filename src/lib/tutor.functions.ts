@@ -4,6 +4,7 @@ import { AgentOrchestrator } from "./agent.orchestrator";
 import { ProfileService } from "./profile.service";
 import { RAGService } from "./rag.service";
 import { AssessmentService } from "./assessment.service";
+import { SupabaseDataService } from "./supabase-data.service";
 
 // Zod schemas for input validation
 const askSchema = z.object({
@@ -173,4 +174,28 @@ export const getRecommendationsServerFn = createServerFn({ method: "POST" }).han
  */
 export const getStudyPlanServerFn = createServerFn({ method: "POST" }).handler(async () => {
   return ProfileService.getStudyPlan();
+});
+
+const feedbackSubmitSchema = z.object({
+  topic: z.string(),
+  question: z.string().optional(),
+  answerSnippet: z.string(),
+  rating: z.union([z.enum(["helpful", "unhelpful"]), z.number()]),
+  comment: z.string().optional(),
+});
+
+/**
+ * Server Function: Submit User Rating / Feedback to Supabase
+ */
+export const rateAnswerServerFn = createServerFn({ method: "POST" })
+  .validator((data: unknown) => feedbackSubmitSchema.parse(data))
+  .handler(async ({ data }) => {
+    return SupabaseDataService.recordFeedback(data);
+  });
+
+/**
+ * Server Function: Fetch Recent Feedback Entries from Supabase
+ */
+export const getFeedbackHistoryServerFn = createServerFn({ method: "POST" }).handler(async () => {
+  return SupabaseDataService.getRecentFeedback();
 });

@@ -22,6 +22,8 @@ import {
   User,
   Zap,
   CheckCircle2,
+  ThumbsUp,
+  ThumbsDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AtomScene } from "@/components/tutor/AtomScene";
@@ -46,6 +48,7 @@ import {
   getStudyMaterialsServerFn,
   getRecommendationsServerFn,
   getStudyPlanServerFn,
+  rateAnswerServerFn,
 } from "@/lib/tutor.functions";
 
 export const Route = createFileRoute("/")({
@@ -75,6 +78,8 @@ type Message = {
   role: "user" | "assistant";
   content: string;
   toolCalls?: { toolName: string; output: string }[];
+  feedback?: "helpful" | "unhelpful";
+  feedbackSaved?: boolean;
 };
 
 type ViewMode = "chat" | "materials" | "quiz" | "progress" | "plan";
@@ -97,7 +102,8 @@ const starters = [
   {
     icon: Lightbulb,
     title: "Linear & Logistic Regression",
-    question: "Explain the difference between Linear and Logistic Regression, including the sigmoid function.",
+    question:
+      "Explain the difference between Linear and Logistic Regression, including the sigmoid function.",
   },
   {
     icon: BookOpen,
@@ -107,7 +113,8 @@ const starters = [
   {
     icon: Atom,
     title: "Transformers & LLMs",
-    question: "How do Transformers use self-attention mechanisms to process sequences and power modern LLMs?",
+    question:
+      "How do Transformers use self-attention mechanisms to process sequences and power modern LLMs?",
   },
 ];
 
@@ -281,6 +288,35 @@ function TutorPage() {
     setTopic(tName);
     setActiveView("chat");
     void send(`Teach me about ${tName.toLowerCase()}.`, "Explain");
+  }
+
+  async function handleRateMessage(messageIndex: number, rating: "helpful" | "unhelpful") {
+    const target = messages[messageIndex];
+    if (!target || target.role !== "assistant") return;
+
+    const previousUserMsg = messages
+      .slice(0, messageIndex)
+      .reverse()
+      .find((m) => m.role === "user");
+
+    setMessages((prev) =>
+      prev.map((m, idx) =>
+        idx === messageIndex ? { ...m, feedback: rating, feedbackSaved: true } : m,
+      ),
+    );
+
+    try {
+      await rateAnswerServerFn({
+        data: {
+          topic,
+          question: previousUserMsg?.content,
+          answerSnippet: target.content,
+          rating,
+        },
+      });
+    } catch (err) {
+      console.error("Failed to persist feedback in Supabase:", err);
+    }
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -570,6 +606,43 @@ function TutorPage() {
                             <div className="message-text whitespace-pre-wrap">
                               {message.content}
                             </div>
+
+                            {message.role === "assistant" && (
+                              <div className="mt-2.5 pt-2 border-t border-border/40 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                                <span className="text-[11px] font-medium">Was this helpful?</span>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => void handleRateMessage(i, "helpful")}
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-all ${
+                                      message.feedback === "helpful"
+                                        ? "bg-emerald-500/15 text-emerald-600 border border-emerald-500/30"
+                                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                                    }`}
+                                    title="Rate explanation as helpful"
+                                  >
+                                    <ThumbsUp size={12} /> Helpful
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => void handleRateMessage(i, "unhelpful")}
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-all ${
+                                      message.feedback === "unhelpful"
+                                        ? "bg-rose-500/15 text-rose-600 border border-rose-500/30"
+                                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                                    }`}
+                                    title="Rate explanation as needs work"
+                                  >
+                                    <ThumbsDown size={12} /> Needs Work
+                                  </button>
+                                  {message.feedbackSaved && (
+                                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium ml-1">
+                                      ✓ Saved to Supabase
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}

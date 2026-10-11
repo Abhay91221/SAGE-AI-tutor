@@ -144,3 +144,13 @@ export interface Recommendation {
   priority: "high" | "medium" | "low";
   reason: string;
 }
+
+export interface TutorFeedback {
+  id: string;
+  topic: string;
+  question?: string;
+  answerSnippet: string;
+  rating: "helpful" | "unhelpful" | number;
+  comment?: string;
+  timestamp: string;
+}

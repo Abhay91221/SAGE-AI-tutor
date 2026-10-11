@@ -3,13 +3,14 @@
 AI Tutor Agent
 
 Teaches academic concepts interactively, answers questions, and adapts explanations to the learner's level.  
-make smooth transition and 3d object
+with smooth transition and 3d object
+try to use best technologies for making it interactive and user-friendly
 
-This project was built with [Lovable](https://lovable.dev).
+This project was built with [lovable](https://lovable.dev).
 
-## Build with Lovable
+## Build by Abhay
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/2a11155d-6c9c-41bc-808e-d8c544b50417).
+Continue developing this project in the [lovable editor](https://lovable.dev/projects/2a11155d-6c9c-41bc-808e-d8c544b50417).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.

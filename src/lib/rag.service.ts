@@ -122,10 +122,26 @@ export class RAGService {
     let chunkIndex = 0;
     let currentPage = 1;
 
-    for (const para of paragraphs) {
-      if (para.toLowerCase().includes("page ") && para.length < 30) {
-        const match = para.match(/page\s+(\d+)/i);
-        if (match && match[1]) currentPage = parseInt(match[1], 10);
+    for (const rawPara of paragraphs) {
+      let para = rawPara;
+      const pageLineMatch = para.match(/^(?:page\s+(\d+)|\[page\s+(\d+)\])/i);
+      if (pageLineMatch) {
+        const nextPg = parseInt(pageLineMatch[1] || pageLineMatch[2] || "1", 10);
+        if (currentChunk.trim().length > 0) {
+          chunks.push({
+            id: `${docId}_chunk_${chunkIndex}`,
+            documentId: docId,
+            documentName: filename,
+            pageNumber: currentPage,
+            chunkIndex,
+            text: currentChunk.trim(),
+          });
+          chunkIndex++;
+          currentChunk = "";
+        }
+        currentPage = nextPg;
+        para = para.replace(/^(?:page\s+(\d+)|\[page\s+(\d+)\])\s*\n?/i, "").trim();
+        if (!para) continue;
       }
 
       if ((currentChunk + "\n" + para).length > chunkSize && currentChunk.trim().length > 0) {

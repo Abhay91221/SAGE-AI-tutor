@@ -51,54 +51,63 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
     {
       id: "q_llr_1",
       topic: "Linear & Logistic Regression",
-      question: "What is the key functional difference between Linear Regression and Logistic Regression?",
+      question:
+        "What is the key functional difference between Linear Regression and Logistic Regression?",
       questionType: "mcq",
       options: [
         "Linear Regression fits a straight line for continuous predictions, while Logistic uses a sigmoid function for binary (0/1) probabilities",
         "Linear Regression works only on text, while Logistic Regression works only on numbers",
         "Logistic Regression predicts continuous numbers, while Linear Regression predicts 0 or 1",
-        "Both use sigmoid functions to fit decision curves"
+        "Both use sigmoid functions to fit decision curves",
       ],
-      correctAnswer: "Linear Regression fits a straight line for continuous predictions, while Logistic uses a sigmoid function for binary (0/1) probabilities",
-      explanation: "Linear Regression outputs continuous values (-\u221E to +\u221E), whereas Logistic Regression applies the Sigmoid function \u03C3(z) = 1/(1+e^-z) to constrain predictions into binary probabilities between 0 and 1.",
+      correctAnswer:
+        "Linear Regression fits a straight line for continuous predictions, while Logistic uses a sigmoid function for binary (0/1) probabilities",
+      explanation:
+        "Linear Regression outputs continuous values (-\u221E to +\u221E), whereas Logistic Regression applies the Sigmoid function \u03C3(z) = 1/(1+e^-z) to constrain predictions into binary probabilities between 0 and 1.",
       difficulty: "Beginner",
     },
     {
       id: "q_llr_2",
       topic: "Linear & Logistic Regression",
-      question: "Which activation function squeezes real-valued numbers into probabilities between 0 and 1 in Logistic Regression?",
+      question:
+        "Which activation function squeezes real-valued numbers into probabilities between 0 and 1 in Logistic Regression?",
       questionType: "short_answer",
       correctAnswer: "Sigmoid function",
-      explanation: "The Sigmoid (logistic) function maps any real input to a valid probability in the range (0, 1).",
+      explanation:
+        "The Sigmoid (logistic) function maps any real input to a valid probability in the range (0, 1).",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "bias-variance tradeoff": [
     {
       id: "q_bvt_1",
       topic: "Bias-Variance Tradeoff",
-      question: "A model suffers from High Variance. What behavior will it exhibit on training vs test data?",
+      question:
+        "A model suffers from High Variance. What behavior will it exhibit on training vs test data?",
       questionType: "mcq",
       options: [
         "Overfitting: High training accuracy but fails to generalize to test data",
         "Underfitting: Poor accuracy on both training and test data",
         "Zero error on all datasets",
-        "Slow training speed due to small dataset size"
+        "Slow training speed due to small dataset size",
       ],
       correctAnswer: "Overfitting: High training accuracy but fails to generalize to test data",
-      explanation: "High Variance means the model is overly complex and memorizes noise in the training set, leading to overfitting and poor test generalization.",
+      explanation:
+        "High Variance means the model is overly complex and memorizes noise in the training set, leading to overfitting and poor test generalization.",
       difficulty: "Intermediate",
     },
     {
       id: "q_bvt_2",
       topic: "Bias-Variance Tradeoff",
-      question: "High Bias in a machine learning model causes underfitting because the model is too simple.",
+      question:
+        "High Bias in a machine learning model causes underfitting because the model is too simple.",
       questionType: "true_false",
       options: ["True", "False"],
       correctAnswer: "True",
-      explanation: "High Bias occurs when model assumptions are overly simplistic (e.g., fitting a linear model to quadratic data), leading to underfitting.",
+      explanation:
+        "High Bias occurs when model assumptions are overly simplistic (e.g., fitting a linear model to quadratic data), leading to underfitting.",
       difficulty: "Beginner",
-    }
+    },
   ],
   "gradient descent": [
     {
@@ -110,21 +119,25 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
         "Iteratively update model weights to minimize the cost/loss function",
         "Increase model bias to prevent overfitting",
         "Randomly shuffle feature columns before training",
-        "Convert continuous numbers into binary 0s and 1s"
+        "Convert continuous numbers into binary 0s and 1s",
       ],
       correctAnswer: "Iteratively update model weights to minimize the cost/loss function",
-      explanation: "Gradient Descent computes the gradient of the loss function with respect to weight parameters and updates weights in the negative gradient direction.",
+      explanation:
+        "Gradient Descent computes the gradient of the loss function with respect to weight parameters and updates weights in the negative gradient direction.",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "evaluation metrics": [
     {
       id: "q_em_1",
       topic: "Evaluation Metrics",
-      question: "Why can raw Accuracy be a misleading evaluation metric for highly imbalanced datasets?",
+      question:
+        "Why can raw Accuracy be a misleading evaluation metric for highly imbalanced datasets?",
       questionType: "short_answer",
-      correctAnswer: "A model predicting only the majority class achieves high accuracy while failing completely on minority cases.",
-      explanation: "On a 99% negative dataset, a dummy model predicting 100% negative gets 99% accuracy but zero recall on positive cases.",
+      correctAnswer:
+        "A model predicting only the majority class achieves high accuracy while failing completely on minority cases.",
+      explanation:
+        "On a 99% negative dataset, a dummy model predicting 100% negative gets 99% accuracy but zero recall on positive cases.",
       difficulty: "Intermediate",
     },
     {
@@ -134,9 +147,10 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
       questionType: "mcq",
       options: ["Precision", "Recall", "Accuracy", "Mean Absolute Error"],
       correctAnswer: "Precision",
-      explanation: "Precision = True Positives / (True Positives + False Positives). High precision minimizes false alarms.",
+      explanation:
+        "Precision = True Positives / (True Positives + False Positives). High precision minimizes false alarms.",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "regularization (l1 & l2)": [
     {
@@ -148,12 +162,14 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
         "L1 (Lasso) shrinks unhelpful weights exactly to zero for feature selection; L2 (Ridge) shrinks weights close to zero",
         "L2 eliminates features completely, while L1 increases model variance",
         "L1 regularization is only used for image data",
-        "L2 regularization multiplies loss by infinity"
+        "L2 regularization multiplies loss by infinity",
       ],
-      correctAnswer: "L1 (Lasso) shrinks unhelpful weights exactly to zero for feature selection; L2 (Ridge) shrinks weights close to zero",
-      explanation: "L1 uses the absolute value of weights penalty |w| forcing sparse solutions, whereas L2 uses squared penalty w^2 for smooth weight decay.",
+      correctAnswer:
+        "L1 (Lasso) shrinks unhelpful weights exactly to zero for feature selection; L2 (Ridge) shrinks weights close to zero",
+      explanation:
+        "L1 uses the absolute value of weights penalty |w| forcing sparse solutions, whereas L2 uses squared penalty w^2 for smooth weight decay.",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "ensemble methods": [
     {
@@ -165,37 +181,48 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
         "Random Forest builds trees independently in parallel (Bagging); XGBoost builds trees sequentially to fix prior errors (Boosting)",
         "Random Forest is a single decision tree, while XGBoost uses linear regression",
         "XGBoost trains trees in parallel to reduce variance, while Random Forest builds sequentially",
-        "Neither uses decision trees"
+        "Neither uses decision trees",
       ],
-      correctAnswer: "Random Forest builds trees independently in parallel (Bagging); XGBoost builds trees sequentially to fix prior errors (Boosting)",
-      explanation: "Bagging (Random Forest) reduces variance by averaging independent trees. Boosting (XGBoost) reduces bias by sequentially fitting new trees to residual errors.",
+      correctAnswer:
+        "Random Forest builds trees independently in parallel (Bagging); XGBoost builds trees sequentially to fix prior errors (Boosting)",
+      explanation:
+        "Bagging (Random Forest) reduces variance by averaging independent trees. Boosting (XGBoost) reduces bias by sequentially fitting new trees to residual errors.",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "feature engineering": [
     {
       id: "q_fe_1",
       topic: "Feature Engineering",
-      question: "Which technique converts categorical text labels into binary indicator columns of 1s and 0s?",
+      question:
+        "Which technique converts categorical text labels into binary indicator columns of 1s and 0s?",
       questionType: "mcq",
-      options: ["One-Hot Encoding", "Feature Scaling", "Principal Component Analysis", "Sigmoid Activation"],
+      options: [
+        "One-Hot Encoding",
+        "Feature Scaling",
+        "Principal Component Analysis",
+        "Sigmoid Activation",
+      ],
       correctAnswer: "One-Hot Encoding",
-      explanation: "One-Hot Encoding transforms categorical variables into binary vectors so numerical algorithms can digest them without imposing false ordinal rank.",
+      explanation:
+        "One-Hot Encoding transforms categorical variables into binary vectors so numerical algorithms can digest them without imposing false ordinal rank.",
       difficulty: "Beginner",
-    }
+    },
   ],
   "dimensionality reduction (pca)": [
     {
       id: "q_pca_1",
       topic: "Dimensionality Reduction (PCA)",
-      question: "What does Principal Component Analysis (PCA) preserve when projecting high-dimensional data onto fewer axes?",
+      question:
+        "What does Principal Component Analysis (PCA) preserve when projecting high-dimensional data onto fewer axes?",
       questionType: "short_answer",
       correctAnswer: "Maximum variance of the original dataset while dropping noise.",
-      explanation: "PCA identifies orthogonal principal components along which data variance is maximized.",
+      explanation:
+        "PCA identifies orthogonal principal components along which data variance is maximized.",
       difficulty: "Advanced",
-    }
+    },
   ],
-  "clustering": [
+  clustering: [
     {
       id: "q_cls_1",
       topic: "Clustering",
@@ -205,25 +232,34 @@ const QUIZ_BANK: Record<string, QuizQuestion[]> = {
         "K-Means partitions data into a fixed K distance-based clusters; DBSCAN groups based on spatial density and isolates noise/outliers",
         "K-Means automatically detects outliers, while DBSCAN requires K centroids upfront",
         "DBSCAN requires a target label Y, while K-Means is supervised",
-        "K-Means uses decision trees to split clusters"
+        "K-Means uses decision trees to split clusters",
       ],
-      correctAnswer: "K-Means partitions data into a fixed K distance-based clusters; DBSCAN groups based on spatial density and isolates noise/outliers",
-      explanation: "K-Means assumes spherical clusters around K centroids. DBSCAN finds arbitrarily shaped dense clusters and explicitly labels sparse points as outliers.",
+      correctAnswer:
+        "K-Means partitions data into a fixed K distance-based clusters; DBSCAN groups based on spatial density and isolates noise/outliers",
+      explanation:
+        "K-Means assumes spherical clusters around K centroids. DBSCAN finds arbitrarily shaped dense clusters and explicitly labels sparse points as outliers.",
       difficulty: "Intermediate",
-    }
+    },
   ],
   "transformers & deep learning": [
     {
       id: "q_tf_1",
       topic: "Transformers & Deep Learning",
-      question: "What core mechanism enables Transformer neural networks to dynamically weigh connections across all sequence tokens in parallel?",
+      question:
+        "What core mechanism enables Transformer neural networks to dynamically weigh connections across all sequence tokens in parallel?",
       questionType: "mcq",
-      options: ["Self-Attention Mechanism", "Convolutions", "Recurrent Latent Loops", "Gradient Clipping"],
+      options: [
+        "Self-Attention Mechanism",
+        "Convolutions",
+        "Recurrent Latent Loops",
+        "Gradient Clipping",
+      ],
       correctAnswer: "Self-Attention Mechanism",
-      explanation: "Self-Attention calculates attention scores between every pair of input tokens simultaneously, allowing Transformers to power modern LLMs.",
+      explanation:
+        "Self-Attention calculates attention scores between every pair of input tokens simultaneously, allowing Transformers to power modern LLMs.",
       difficulty: "Advanced",
-    }
-  ]
+    },
+  ],
 };
 
 export class AssessmentService {
@@ -237,7 +273,7 @@ export class AssessmentService {
     // Find matching questions from fallback bank or construct dynamic template
     for (const k of Object.keys(QUIZ_BANK)) {
       if (key.includes(k) || k.includes(key)) {
-        questions = QUIZ_BANK[k] ?? [];
+        questions = [...(QUIZ_BANK[k] ?? [])];
         break;
       }
     }
@@ -269,6 +305,37 @@ export class AssessmentService {
           difficulty: level,
         },
       ];
+    }
+
+    if (questions.length < 3) {
+      const topicSlug = topic.toLowerCase().replace(/[^a-z0-9]/g, "_");
+      const padQuestions: QuizQuestion[] = [
+        {
+          id: `q_pad_1_${topicSlug}`,
+          topic,
+          question: `In what practical scenarios would you apply ${topic}?`,
+          questionType: "short_answer",
+          correctAnswer: `${topic} is applied when modeling predictive relationships or optimizing algorithms on real-world data.`,
+          explanation: `Applying ${topic} aligns algorithmic modeling with empirical application constraints.`,
+          difficulty: level,
+        },
+        {
+          id: `q_pad_2_${topicSlug}`,
+          topic,
+          question: `Verifying model assumptions before training is a critical step when working with ${topic}.`,
+          questionType: "true_false",
+          options: ["True", "False"],
+          correctAnswer: "True",
+          explanation: `Verifying assumptions prevents high bias or excessive variance during evaluation.`,
+          difficulty: level,
+        },
+      ];
+
+      for (const pq of padQuestions) {
+        if (questions.length < 3 && !questions.some((q) => q.id === pq.id)) {
+          questions.push(pq);
+        }
+      }
     }
 
     return {
@@ -394,55 +461,91 @@ export class AssessmentService {
     const topicLower = topic.toLowerCase();
 
     if (topicLower.includes("linear & logistic") || topicLower.includes("logistic regression")) {
-      whyWrong = "Misconception: Confusing continuous regression output with probability classification.";
-      explanation = "Linear regression predicts unbounded continuous numbers (y = wx + b). Logistic regression uses a Sigmoid function to map inputs into binary probabilities (0 to 1).";
-      counterExample = "Predicting house prices requires Linear Regression (\$500k continuous value), whereas predicting spam vs not-spam requires Logistic Regression (0.92 probability).";
-      remedialHint = "Check whether your target variable Y is continuous (numeric) or discrete (category/probability).";
+      whyWrong =
+        "Misconception: Confusing continuous regression output with probability classification.";
+      explanation =
+        "Linear regression predicts unbounded continuous numbers (y = wx + b). Logistic regression uses a Sigmoid function to map inputs into binary probabilities (0 to 1).";
+      counterExample =
+        "Predicting house prices requires Linear Regression ($500k continuous value), whereas predicting spam vs not-spam requires Logistic Regression (0.92 probability).";
+      remedialHint =
+        "Check whether your target variable Y is continuous (numeric) or discrete (category/probability).";
     } else if (topicLower.includes("bias-variance")) {
-      whyWrong = "Misconception: Confusing underfitting (High Bias) with overfitting (High Variance).";
-      explanation = "High Bias means the model is too simple (underfitting both train and test data). High Variance means the model memorizes training noise (overfitting).";
-      counterExample = "A straight line fitted to complex curved data has High Bias (underfits). A 100th-degree polynomial connecting every noisy point has High Variance (overfits).";
-      remedialHint = "Remember: High Bias = underfit (too simple); High Variance = overfit (memorizes noise).";
+      whyWrong =
+        "Misconception: Confusing underfitting (High Bias) with overfitting (High Variance).";
+      explanation =
+        "High Bias means the model is too simple (underfitting both train and test data). High Variance means the model memorizes training noise (overfitting).";
+      counterExample =
+        "A straight line fitted to complex curved data has High Bias (underfits). A 100th-degree polynomial connecting every noisy point has High Variance (overfits).";
+      remedialHint =
+        "Remember: High Bias = underfit (too simple); High Variance = overfit (memorizes noise).";
     } else if (topicLower.includes("gradient descent")) {
-      whyWrong = "Misconception: Believing Gradient Descent updates parameters in the direction of steepest loss increase.";
-      explanation = "Gradient Descent steps in the OPPOSITE (negative) direction of the gradient to MINIMIZE the cost function.";
-      counterExample = "Walking uphill increases elevation (Gradient Ascent). Walking downhill into a valley minimizes elevation (Gradient Descent).";
+      whyWrong =
+        "Misconception: Believing Gradient Descent updates parameters in the direction of steepest loss increase.";
+      explanation =
+        "Gradient Descent steps in the OPPOSITE (negative) direction of the gradient to MINIMIZE the cost function.";
+      counterExample =
+        "Walking uphill increases elevation (Gradient Ascent). Walking downhill into a valley minimizes elevation (Gradient Descent).";
       remedialHint = "Remember w_new = w_old - learning_rate * gradient (note the minus sign).";
     } else if (topicLower.includes("evaluation metrics")) {
-      whyWrong = "Misconception: Assuming Accuracy is always a reliable metric regardless of class distribution.";
-      explanation = "Accuracy fails on imbalanced data because predicting only the majority class gives high accuracy but misses all rare positive events.";
-      counterExample = "In rare disease screening (1 in 10,000 cases), a test saying 'Healthy' for everyone has 99.99% accuracy but 0% recall, letting all sick patients go undetected.";
-      remedialHint = "Use Precision (avoiding false positives), Recall (avoiding false negatives), and F1-Score (their balance) for imbalanced data.";
+      whyWrong =
+        "Misconception: Assuming Accuracy is always a reliable metric regardless of class distribution.";
+      explanation =
+        "Accuracy fails on imbalanced data because predicting only the majority class gives high accuracy but misses all rare positive events.";
+      counterExample =
+        "In rare disease screening (1 in 10,000 cases), a test saying 'Healthy' for everyone has 99.99% accuracy but 0% recall, letting all sick patients go undetected.";
+      remedialHint =
+        "Use Precision (avoiding false positives), Recall (avoiding false negatives), and F1-Score (their balance) for imbalanced data.";
     } else if (topicLower.includes("regularization")) {
-      whyWrong = "Misconception: Confusing L1 (Lasso) feature selection with L2 (Ridge) weight decay.";
-      explanation = "L1 (Lasso) uses absolute penalties to drive weights completely to ZERO for feature selection. L2 (Ridge) uses squared penalties to shrink weights close to zero without dropping features.";
-      counterExample = "In a 1000-feature model where only 10 matter, L1 zeroes out 990 noise features. L2 keeps all 1000 features with small weights.";
-      remedialHint = "L1 = Lasso = zero weights = feature selection. L2 = Ridge = smooth weight reduction.";
+      whyWrong =
+        "Misconception: Confusing L1 (Lasso) feature selection with L2 (Ridge) weight decay.";
+      explanation =
+        "L1 (Lasso) uses absolute penalties to drive weights completely to ZERO for feature selection. L2 (Ridge) uses squared penalties to shrink weights close to zero without dropping features.";
+      counterExample =
+        "In a 1000-feature model where only 10 matter, L1 zeroes out 990 noise features. L2 keeps all 1000 features with small weights.";
+      remedialHint =
+        "L1 = Lasso = zero weights = feature selection. L2 = Ridge = smooth weight reduction.";
     } else if (topicLower.includes("ensemble methods")) {
-      whyWrong = "Misconception: Confusing parallel tree building (Bagging) with sequential error correction (Boosting).";
-      explanation = "Random Forest (Bagging) builds trees in parallel independently to lower variance. XGBoost (Boosting) builds trees sequentially, fitting each new tree on prior residual errors to lower bias.";
-      counterExample = "100 experts voting independently (Random Forest) lowers variance. A chain of tutors where each corrects the previous tutor's mistake (XGBoost) lowers bias.";
-      remedialHint = "Bagging = parallel independent trees (low variance). Boosting = sequential error-correcting trees (low bias).";
+      whyWrong =
+        "Misconception: Confusing parallel tree building (Bagging) with sequential error correction (Boosting).";
+      explanation =
+        "Random Forest (Bagging) builds trees in parallel independently to lower variance. XGBoost (Boosting) builds trees sequentially, fitting each new tree on prior residual errors to lower bias.";
+      counterExample =
+        "100 experts voting independently (Random Forest) lowers variance. A chain of tutors where each corrects the previous tutor's mistake (XGBoost) lowers bias.";
+      remedialHint =
+        "Bagging = parallel independent trees (low variance). Boosting = sequential error-correcting trees (low bias).";
     } else if (topicLower.includes("feature engineering")) {
       whyWrong = "Misconception: Confusing numeric scaling with categorical label encoding.";
-      explanation = "Feature Scaling (MinMax/Z-score) normalizes numerical ranges. One-Hot Encoding converts text categories into binary (0/1) indicator columns.";
-      counterExample = "Encoding 'Red', 'Green', 'Blue' as 1, 2, 3 tricks algorithms into thinking Blue is '3x greater than Red'. One-Hot Encoding creates separate 0/1 columns instead.";
-      remedialHint = "Use One-Hot Encoding for unstructured text categories, and Scaling for continuous numbers.";
+      explanation =
+        "Feature Scaling (MinMax/Z-score) normalizes numerical ranges. One-Hot Encoding converts text categories into binary (0/1) indicator columns.";
+      counterExample =
+        "Encoding 'Red', 'Green', 'Blue' as 1, 2, 3 tricks algorithms into thinking Blue is '3x greater than Red'. One-Hot Encoding creates separate 0/1 columns instead.";
+      remedialHint =
+        "Use One-Hot Encoding for unstructured text categories, and Scaling for continuous numbers.";
     } else if (topicLower.includes("dimensionality reduction") || topicLower.includes("pca")) {
       whyWrong = "Misconception: Believing PCA simply deletes unpromising feature columns.";
-      explanation = "PCA does not just pick existing columns; it projects data onto entirely NEW linear axes (principal components) that maximize variance retention.";
-      counterExample = "Instead of dropping Height or Weight, PCA creates a new axis 'Body Size' combining both to capture max variance.";
-      remedialHint = "PCA constructs new orthogonal projection axes to compress high dimensions into fewer components.";
+      explanation =
+        "PCA does not just pick existing columns; it projects data onto entirely NEW linear axes (principal components) that maximize variance retention.";
+      counterExample =
+        "Instead of dropping Height or Weight, PCA creates a new axis 'Body Size' combining both to capture max variance.";
+      remedialHint =
+        "PCA constructs new orthogonal projection axes to compress high dimensions into fewer components.";
     } else if (topicLower.includes("clustering")) {
       whyWrong = "Misconception: Assuming K-Means and DBSCAN group data in the same way.";
-      explanation = "K-Means partitions data into a fixed number of K distance-based spherical clusters. DBSCAN groups points based on local density and explicitly isolates noise/outliers.";
-      counterExample = "For concentric ring patterns or data with random outlier dots, K-Means fails by slicing spherical groups, whereas DBSCAN traces the dense rings and flags outliers.";
-      remedialHint = "Use K-Means when K is known and clusters are spherical; use DBSCAN for density-based arbitrary shapes and outlier removal.";
+      explanation =
+        "K-Means partitions data into a fixed number of K distance-based spherical clusters. DBSCAN groups points based on local density and explicitly isolates noise/outliers.";
+      counterExample =
+        "For concentric ring patterns or data with random outlier dots, K-Means fails by slicing spherical groups, whereas DBSCAN traces the dense rings and flags outliers.";
+      remedialHint =
+        "Use K-Means when K is known and clusters are spherical; use DBSCAN for density-based arbitrary shapes and outlier removal.";
     } else if (topicLower.includes("transformers") || topicLower.includes("deep learning")) {
-      whyWrong = "Misconception: Believing Transformers process sequence tokens one by one sequentially like old RNNs.";
-      explanation = "Transformers process all sequence tokens simultaneously in parallel using Self-Attention mechanisms, enabling massive scalability in LLMs.";
-      counterExample = "RNNs read word 1, then word 2, then word 3 sequentially. Transformers look at the entire sentence at once, calculating attention pairs between all words in parallel.";
-      remedialHint = "Self-attention evaluates all token relationships simultaneously rather than step-by-step recurrence.";
+      whyWrong =
+        "Misconception: Believing Transformers process sequence tokens one by one sequentially like old RNNs.";
+      explanation =
+        "Transformers process all sequence tokens simultaneously in parallel using Self-Attention mechanisms, enabling massive scalability in LLMs.";
+      counterExample =
+        "RNNs read word 1, then word 2, then word 3 sequentially. Transformers look at the entire sentence at once, calculating attention pairs between all words in parallel.";
+      remedialHint =
+        "Self-attention evaluates all token relationships simultaneously rather than step-by-step recurrence.";
     } else if (topic.toLowerCase().includes("decision trees")) {
       whyWrong = "Misconception: Confusing split criteria or model capacity limitations.";
       explanation =

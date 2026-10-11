@@ -128,7 +128,8 @@ const DEFAULT_STUDY_PLAN: StudyPlan = {
       id: "node_1",
       topic: "Linear & Logistic Regression",
       subject: "Machine Learning",
-      description: "Linear line-fitting for continuous prediction vs Logistic sigmoid curve for binary probabilities.",
+      description:
+        "Linear line-fitting for continuous prediction vs Logistic sigmoid curve for binary probabilities.",
       status: "completed",
       prerequisites: [],
       estimatedMinutes: 50,
@@ -209,7 +210,8 @@ const DEFAULT_STUDY_PLAN: StudyPlan = {
       id: "node_10",
       topic: "Transformers & Deep Learning",
       subject: "AI & Deep Learning",
-      description: "Self-Attention mechanisms, sequence modeling, and Large Language Models (LLMs).",
+      description:
+        "Self-Attention mechanisms, sequence modeling, and Large Language Models (LLMs).",
       status: "locked",
       prerequisites: ["node_9"],
       estimatedMinutes: 90,

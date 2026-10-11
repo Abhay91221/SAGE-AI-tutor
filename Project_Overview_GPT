@@ -1,0 +1,82 @@
+# Project Overview – AI Tutor Agent
+
+## Introduction
+
+This project is an **AI Tutor Agent** that helps learners understand academic concepts. It interacts with users through a web app, gives explanations that match the learner’s level, and can show smooth transitions and 3‑D visual objects to make learning more engaging.
+
+## What It Does
+
+- **Interactive tutoring** – asks questions, explains topics, and adapts to the user’s knowledge.
+- **3‑D visualizations** – uses React‑Three‑Fiber to display interactive 3‑D objects.
+- **Smooth transitions** – animations make the experience feel fluid.
+- **RAG (Retrieval‑Augmented Generation)** – fetches relevant study material and combines it with AI‑generated answers.
+- **Easy to develop** – built on the Lovable platform, so every change is automatically synced with the repository.
+
+## Why It Is Useful
+
+- Learners get **personalised explanations** that fit their current level.
+- Teachers can **quickly add new topics** without writing a lot of code.
+- The 3‑D view makes abstract ideas easier to grasp.
+
+## Technology Stack
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| Front‑end | **React** + **React‑Three‑Fiber** | UI and 3‑D visualisation |
+| Backend | **Node.js** (Vite + TanStack) | API server, routes, AI calls |
+| Data storage | **Supabase** | User data, session storage |
+| AI / RAG | **Gemini / OpenAI model** via server function | Generates tutoring answers |
+| Build tools | **Vite**, **TanStack Start**, **TailwindCSS** | Fast development and styling |
+| Platform | **Lovable** | Syncs code, CI/CD, live editor |
+
+## High‑Level Architecture
+
+![Architecture Diagram](file:///C:/Users/abhay/.gemini/antigravity-ide/brain/ebc3a7f7-56f6-4789-b6f5-b81df8cdf58c/architecture_diagram_1791698336611.png)
+
+1. **User opens the web app** (React).  
+2. The UI talks to the **Node.js backend** via HTTP.  
+3. The backend forwards the request to the **AI model API** (Gemini).  
+4. If extra information is needed, the backend calls the **RAG service** which reads data from **Supabase**.  
+5. The AI response is sent back to the UI, which shows the explanation and may render a **3‑D object**.
+
+## How It Works – Simple Flow
+
+1. **Start** – User visits `http://localhost:8080` (or the deployed URL).
+2. **Select a topic** – The UI sends a request like `GET /api/tutor?topic=Math`.
+3. **Backend receives** – It builds a prompt and calls the AI model.
+4. **RAG (optional)** – If the prompt needs extra facts, the backend queries Supabase for relevant notes and adds them to the prompt.
+5. **AI generates** – The model returns a short, level‑appropriate explanation.
+6. **Render** – The frontend displays the text and, if configured, shows a 3‑D object (e.g., a molecule, geometry shape).
+7. **Feedback loop** – The user can rate the answer; the rating is stored in Supabase for future improvements.
+
+## Getting Started (Development)
+
+```sh
+# Clone the repository
+git clone <this-repository-url>
+cd <repository-name>
+
+# Install dependencies
+npm i
+
+# Start the development server
+npm run dev
+```
+
+The app will be available at **http://localhost:8080**.  
+Use the Lovable editor for live editing – every commit is synced automatically.
+
+## Running the Project
+
+- **Node.js** (>=18) and **npm** are required.  
+- The project uses **Vite** for fast hot‑module reloading.  
+- Environment variables are stored in a `.env` file (see `.env.example`).
+
+## Future Improvements
+
+- Add more interactive 3‑D models for different subjects.  
+- Extend the RAG service with more educational resources.  
+- Improve AI prompting for better pedagogical explanations.
+
+---
+*Generated on 2026‑10‑11.*
