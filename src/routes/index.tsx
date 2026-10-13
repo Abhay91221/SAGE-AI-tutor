@@ -242,7 +242,7 @@ function TutorPage() {
         ...next,
         {
           role: "assistant",
-          content: res.answer,
+          content: (res.answer || "").replace(/\*\*/g, ""),
           toolCalls: res.toolCallsExecuted,
         },
       ]);
@@ -604,7 +604,7 @@ function TutorPage() {
                             )}
 
                             <div className="message-text whitespace-pre-wrap">
-                              {message.content}
+                              {message.content.replace(/\*\*/g, "")}
                             </div>
 
                             {message.role === "assistant" && (

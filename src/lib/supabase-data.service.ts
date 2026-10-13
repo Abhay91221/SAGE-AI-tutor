@@ -48,8 +48,8 @@ export class SupabaseDataService {
 
     try {
       // Attempt to save to Supabase 'tutor_feedback' table
-      const { data, error } = await supabase
-        .from("tutor_feedback" as unknown as "never")
+      const { data, error } = await (supabase as any)
+        .from("tutor_feedback")
         .insert([
           {
             id: record.id,
@@ -59,8 +59,8 @@ export class SupabaseDataService {
             rating: typeof record.rating === "number" ? record.rating.toString() : record.rating,
             comment: record.comment,
             created_at: record.timestamp,
-          } as unknown as never,
-        ] as never[])
+          },
+        ])
         .select();
 
       if (!error && data) {
@@ -78,10 +78,10 @@ export class SupabaseDataService {
    */
   public static async getRecentFeedback(): Promise<TutorFeedback[]> {
     try {
-      const { data, error } = await supabase
-        .from("tutor_feedback" as unknown as "never")
+      const { data, error } = await (supabase as any)
+        .from("tutor_feedback")
         .select("*")
-        .order("created_at" as unknown as "never", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (!error && data && Array.isArray(data) && data.length > 0) {
@@ -107,9 +107,9 @@ export class SupabaseDataService {
    */
   public static async fetchSupabaseNotes(topic?: string): Promise<string[]> {
     try {
-      let query = supabase.from("study_notes" as unknown as "never").select("content, topic");
+      let query = (supabase as any).from("study_notes").select("content, topic");
       if (topic) {
-        query = query.ilike("topic" as unknown as "never", `%${topic}%`);
+        query = query.ilike("topic", `%${topic}%`);
       }
       const { data, error } = await query.limit(5);
 

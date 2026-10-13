@@ -283,25 +283,25 @@ export class AssessmentService {
         {
           id: `q_gen_1_${Date.now()}`,
           topic,
-          question: `Which core principle best defines ${topic}?`,
+          question: `What is the primary motivation or goal behind studying ${topic}?`,
           questionType: "mcq",
           options: [
-            `Systematic execution of ${topic} rules`,
-            `Random trial without feedback`,
-            `Static tabular lookup`,
-            `Unrelated data synthesis`,
+            `To model practical relationships and solve real-world domain challenges`,
+            `To randomly manipulate numbers without clear objectives`,
+            `To avoid testing or evaluating performance outcomes`,
+            `To arbitrarily increase computational complexity`,
           ],
-          correctAnswer: `Systematic execution of ${topic} rules`,
-          explanation: `${topic} relies on clear structural principles tailored to input parameters.`,
+          correctAnswer: `To model practical relationships and solve real-world domain challenges`,
+          explanation: `${topic} provides structured problem-solving principles tailored to real-world tasks.`,
           difficulty: level,
         },
         {
           id: `q_gen_2_${Date.now()}`,
           topic,
-          question: `Explain why understanding ${topic} is critical in practical applications.`,
+          question: `In your own words, what is the most important concept to grasp when first learning ${topic}?`,
           questionType: "short_answer",
-          correctAnswer: `${topic} provides the foundational logic required to solve real-world domain problems.`,
-          explanation: `Conceptual understanding allows generalization to novel problem contexts.`,
+          correctAnswer: `Understanding its core purpose, underlying assumptions, and how it transforms input information.`,
+          explanation: `A solid grasp of the core intuition enables you to apply ${topic} reliably across diverse scenarios.`,
           difficulty: level,
         },
       ];
@@ -313,20 +313,20 @@ export class AssessmentService {
         {
           id: `q_pad_1_${topicSlug}`,
           topic,
-          question: `In what practical scenarios would you apply ${topic}?`,
+          question: `In what practical scenarios would you choose to apply ${topic}?`,
           questionType: "short_answer",
-          correctAnswer: `${topic} is applied when modeling predictive relationships or optimizing algorithms on real-world data.`,
-          explanation: `Applying ${topic} aligns algorithmic modeling with empirical application constraints.`,
+          correctAnswer: `${topic} is chosen when analyzing structured patterns, optimizing performance, or making data-driven decisions.`,
+          explanation: `Applying ${topic} matches analytical methods with real-world requirements.`,
           difficulty: level,
         },
         {
           id: `q_pad_2_${topicSlug}`,
           topic,
-          question: `Verifying model assumptions before training is a critical step when working with ${topic}.`,
+          question: `Verifying underlying assumptions before applying ${topic} is critical to achieving reliable results.`,
           questionType: "true_false",
           options: ["True", "False"],
           correctAnswer: "True",
-          explanation: `Verifying assumptions prevents high bias or excessive variance during evaluation.`,
+          explanation: `Checking assumptions beforehand helps avoid unexpected errors and model failures.`,
           difficulty: level,
         },
       ];
@@ -421,9 +421,9 @@ export class AssessmentService {
     const weakConcepts = Array.from(weakConceptsSet);
 
     if (weakConcepts.length > 0) {
-      recommendedRevision = `Focus on reviewing: ${weakConcepts.join(", ")}. Review fundamental definitions and step-by-step examples.`;
+      recommendedRevision = `Focus on brushing up on: ${weakConcepts.join(", ")}. Revisit the core intuition and work through a quick example to solidify your grasp.`;
     } else {
-      recommendedRevision = `Great job! You have demonstrated strong mastery in ${quiz.topic}. Ready for advanced topics!`;
+      recommendedRevision = `Great work! You have shown strong conceptual mastery in ${quiz.topic}. Ready to explore more advanced topics!`;
     }
 
     const result: QuizAttemptResult = {
@@ -453,10 +453,10 @@ export class AssessmentService {
     const topic = question.topic;
     const ansLower = studentAnswer.toLowerCase();
 
-    let whyWrong = "The answer does not match the core principles of the concept.";
+    let whyWrong = "The response misses the key intuition behind this concept.";
     let explanation = question.explanation;
-    let counterExample = "Consider what happens when extreme or inverse conditions are applied.";
-    let remedialHint = "Focus on the fundamental definition before attempting problem-solving.";
+    let counterExample = "Think about how this behaves under simple boundary conditions or edge cases.";
+    let remedialHint = "Start with the core mechanism of the concept before working through the specifics.";
 
     const topicLower = topic.toLowerCase();
 

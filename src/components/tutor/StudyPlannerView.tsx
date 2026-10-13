@@ -59,14 +59,14 @@ export function StudyPlannerView({ studyPlan, onSelectTopicForTutor }: StudyPlan
 
       {/* Sequential Roadmap Nodes List */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-1">
           <h3 className="text-base font-bold text-foreground">Sequential Topic Sequence</h3>
           <span className="text-xs text-muted-foreground">
             Adapts automatically based on quiz performance
           </span>
         </div>
 
-        <div className="relative pl-6 space-y-4 border-l-2 border-border ml-3">
+        <div className="roadmap-timeline">
           {studyPlan.nodes.map((node, i) => {
             let statusBadge = null;
             let isClickable = false;
@@ -101,50 +101,73 @@ export function StudyPlannerView({ studyPlan, onSelectTopicForTutor }: StudyPlan
             }
 
             return (
-              <div key={node.id} className="relative group">
-                {/* Node Icon on Timeline */}
-                <div className="absolute -left-[31px] top-4 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center text-[10px] font-bold text-primary">
+              <div key={node.id} className="roadmap-node-step group">
+                {/* Node Number Marker on Timeline */}
+                <div
+                  className={`roadmap-node-marker ${
+                    node.status === "completed"
+                      ? "completed"
+                      : node.status === "in_progress"
+                      ? "in-progress"
+                      : node.status === "recommended"
+                      ? "recommended"
+                      : "locked"
+                  }`}
+                >
                   {i + 1}
                 </div>
 
                 <div
-                  className={`starter-card p-5 space-y-3 transition-all ${
-                    node.status === "in_progress" ? "border-primary ring-1 ring-primary/30" : ""
+                  className={`roadmap-node-card ${
+                    node.status === "in_progress"
+                      ? "in-progress"
+                      : node.status === "completed"
+                      ? "completed"
+                      : ""
                   }`}
-                  style={{ textAlign: "left" }}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <h4 className="text-base font-bold text-foreground">{node.topic}</h4>
-                      <span className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
-                        <span className="flex items-center gap-1">
-                          <Clock size={13} /> {node.estimatedMinutes} mins
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-base font-bold text-foreground leading-snug">{node.topic}</h4>
+                      <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
+                        <span className="inline-flex items-center gap-1 font-medium">
+                          <Clock size={12} className="text-muted-foreground" /> {node.estimatedMinutes} mins
                         </span>
                         <span>•</span>
                         <span>{node.subject}</span>
-                      </span>
+                      </div>
                     </div>
 
-                    {statusBadge}
+                    <div className="shrink-0">{statusBadge}</div>
                   </div>
 
-                  <p className="text-xs text-muted-foreground">{node.description}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    {node.description}
+                  </p>
 
-                  <div className="pt-2 flex items-center justify-between border-t border-border/50">
-                    <span className="text-[11px] text-muted-foreground">
-                      {node.prerequisites.length > 0
-                        ? `Prerequisites: ${node.prerequisites.join(", ")}`
-                        : "No prerequisites required"}
-                    </span>
+                  <div className="pt-3 mt-0.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-border/60">
+                    <div className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1.5 flex-1 min-w-0">
+                      <span className="font-semibold text-foreground/80 shrink-0">Prerequisites:</span>
+                      <span className="truncate">
+                        {node.prerequisites.length > 0
+                          ? node.prerequisites.join(", ")
+                          : "None required"}
+                      </span>
+                    </div>
 
                     {isClickable && (
                       <Button
                         size="sm"
                         variant={node.status === "in_progress" ? "default" : "outline"}
-                        className="text-xs gap-1"
+                        className={`explore-topic-btn shrink-0 text-xs font-semibold px-3.5 py-1.5 h-8 gap-1.5 ${
+                          node.status === "in_progress"
+                            ? "shadow-sm hover:shadow"
+                            : "hover:border-primary hover:text-primary hover:bg-primary/5"
+                        }`}
                         onClick={() => onSelectTopicForTutor(node.topic)}
                       >
-                        Explore Topic <ArrowRight size={14} />
+                        <span>Explore Topic</span>
+                        <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
                       </Button>
                     )}
                   </div>
