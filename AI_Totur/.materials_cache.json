@@ -1,0 +1,103 @@
+[
+  {
+    "id": "doc_1792859750976_8ghh8",
+    "name": "ML_AI_Core_Handbook.txt",
+    "size": 2492,
+    "uploadDate": "2026-10-24T16:35:50.978Z",
+    "chunksCount": 10,
+    "chunks": [
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_0",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 2,
+        "chunkIndex": 0,
+        "text": "Linear & Logistic Regression Notes:\nLinear Regression fits a straight line to predict continuous numbers (e.g., house prices or salary).\nLogistic Regression uses a sigmoid function sigma(z) = 1 / (1 + e^-z) to predict binary probabilities (0 or 1, such as spam detection or pass/fail)."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_1",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 3,
+        "chunkIndex": 1,
+        "text": "ct binary probabilities (0 or 1, such as spam detection or pass/fail).\nBias-Variance Tradeoff Notes:\nHigh Bias causes underfitting because the model is too simple to capture patterns.\nHigh Variance causes overfitting because the model memorizes training noise and fails to generalize to test data."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_2",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 4,
+        "chunkIndex": 2,
+        "text": "e model memorizes training noise and fails to generalize to test data.\nGradient Descent Notes:\nGradient Descent is an optimization algorithm that iteratively updates weight parameters to minimize a model's cost/loss function by stepping in the negative gradient direction."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_3",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 5,
+        "chunkIndex": 3,
+        "text": "l's cost/loss function by stepping in the negative gradient direction.\nEvaluation Metrics Notes:\nAccuracy can fail on imbalanced data because predicting only the majority class yields high accuracy while missing rare positive cases.\nUse Precision (avoiding false positives), Recall (avoiding false negatives), and F1-Score (the harmonic balance of both)."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_4",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 6,
+        "chunkIndex": 4,
+        "text": "voiding false negatives), and F1-Score (the harmonic balance of both).\nRegularization (L1 & L2) Notes:\nPrevents overfitting by penalizing large weights.\nL1 Regularization (Lasso) adds absolute penalty and shrinks weights to zero for feature selection.\nL2 Regularization (Ridge) adds squared penalty and shrinks weights close to zero to minimize feature impact smoothly."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_5",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 7,
+        "chunkIndex": 5,
+        "text": "and shrinks weights close to zero to minimize feature impact smoothly.\nEnsemble Methods Notes:\nRandom Forest (Bagging) builds decision trees in parallel independently to lower model variance.\nXGBoost (Boosting) builds decision trees sequentially to fix previous errors and lower model bias."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_6",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 8,
+        "chunkIndex": 6,
+        "text": "cision trees sequentially to fix previous errors and lower model bias.\nFeature Engineering Notes:\nModifying data so algorithms can read it effectively.\nIncludes Feature Scaling (equalizing numeric ranges like MinMax or Z-Score) and One-Hot Encoding (turning text categories into binary 1s and 0s)."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_7",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 9,
+        "chunkIndex": 7,
+        "text": "and One-Hot Encoding (turning text categories into binary 1s and 0s).\nDimensionality Reduction (PCA) Notes:\nPrincipal Component Analysis (PCA) compresses datasets with too many features by projecting them onto new orthogonal axes, maximizing variance retention while dropping noise."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_8",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 10,
+        "chunkIndex": 8,
+        "text": "w orthogonal axes, maximizing variance retention while dropping noise.\nClustering Notes:\nUnsupervised grouping without labeled targets.\nK-Means separates data into a fixed number of K distance-based groups.\nDBSCAN groups data based on spatial density and isolates outliers."
+      },
+      {
+        "id": "doc_1792859750976_8ghh8_chunk_9",
+        "documentId": "doc_1792859750976_8ghh8",
+        "documentName": "ML_AI_Core_Handbook.txt",
+        "pageNumber": 10,
+        "chunkIndex": 9,
+        "text": "ps.\nDBSCAN groups data based on spatial density and isolates outliers.\nTransformers & Deep Learning Notes:\nNeural networks learn complex data hierarchies through multi-layer architectures.\nTransformers use self-attention mechanisms to process text sequences in parallel, powering all modern Large Language Models (LLMs)."
+      }
+    ],
+    "topics": [
+      "Linear & Logistic Regression",
+      "Bias-Variance Tradeoff",
+      "Gradient Descent",
+      "Evaluation Metrics",
+      "Regularization (L1 & L2)",
+      "Ensemble Methods",
+      "Feature Engineering",
+      "Dimensionality Reduction (PCA)",
+      "Clustering"
+    ],
+    "summary": "Linear & Logistic Regression Notes:\nLinear Regression fits a straight line to predict continuous numbers (e.g., house prices or salary).\nLogistic Regression uses a sigmoid function sigma(z) = 1 / (1 + e^-z) to predict bi..."
+  }
+]

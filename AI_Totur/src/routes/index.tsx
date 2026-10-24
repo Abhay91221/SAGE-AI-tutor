@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   Atom,
@@ -24,6 +24,7 @@ import {
   CheckCircle2,
   ThumbsUp,
   ThumbsDown,
+  Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AtomScene } from "@/components/tutor/AtomScene";
@@ -187,6 +188,31 @@ function TutorPage() {
 
   const endRef = useRef<HTMLDivElement>(null);
 
+  // Extracted topics from all uploaded study materials (RAG)
+  const notesTopics = useMemo(() => {
+    const list: { topic: string; docId: string; docName: string }[] = [];
+    for (const mat of materials) {
+      const cleanDocBase = mat.name
+        .replace(/\.[^/.]+$/, "")
+        .toLowerCase()
+        .replace(/[-_]/g, " ")
+        .trim();
+      const rawDocName = mat.name.toLowerCase().trim();
+
+      if (mat.topics) {
+        for (const t of mat.topics) {
+          const tClean = t.toLowerCase().trim();
+          // Strictly exclude document file names from topic list
+          if (tClean === cleanDocBase || tClean === rawDocName) continue;
+          if (!list.some((item) => item.topic.toLowerCase() === tClean)) {
+            list.push({ topic: t, docId: mat.id, docName: mat.name });
+          }
+        }
+      }
+    }
+    return list;
+  }, [materials]);
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, loading]);
@@ -280,8 +306,21 @@ function TutorPage() {
     } else {
       setSelectedDocId(docId);
       setSelectedDocName(docName);
+      const targetMat = materials.find((m) => m.id === docId);
+      if (targetMat?.topics && targetMat.topics.length > 0) {
+        setTopic(targetMat.topics[0]);
+      }
       setActiveView("chat");
     }
+  }
+
+  function handleSelectTopicWithDoc(topicName: string, docId: string, docName: string) {
+    setTopic(topicName);
+    setSelectedDocId(docId);
+    setSelectedDocName(docName);
+    setActiveView("chat");
+    setSidebarOpen(false);
+    void send(`Teach me about ${topicName.toLowerCase()} based on my notes.`, "Explain");
   }
 
   function handleTopicPractice(tName: string) {
@@ -406,6 +445,43 @@ function TutorPage() {
             <MapPin size={18} /> Study Planner{" "}
             {activeView === "plan" && <span className="active-indicator" />}
           </div>
+
+          {notesTopics.length > 0 && (
+            <>
+              <div className="sidebar-label topics-label flex items-center justify-between">
+                <span>FROM YOUR NOTES ({notesTopics.length})</span>
+                <span className="text-[10px] text-primary font-mono uppercase bg-primary/10 px-1.5 py-0.5 rounded">
+                  RAG
+                </span>
+              </div>
+              <div
+                className="topic-list mb-3 custom-scrollbar"
+                style={{
+                  maxHeight: "220px",
+                  overflowY: "auto",
+                  paddingRight: "4px",
+                }}
+              >
+                {notesTopics.map((item) => (
+                  <Button
+                    key={item.topic}
+                    variant="ghost"
+                    className={`topic-item ${topic === item.topic && activeView === "chat" ? "selected" : ""}`}
+                    onClick={() => {
+                      setTopic(item.topic);
+                      setSelectedDocId(item.docId);
+                      setSelectedDocName(item.docName);
+                      setActiveView("chat");
+                      setSidebarOpen(false);
+                    }}
+                  >
+                    <FileText size={14} className="text-primary shrink-0" />
+                    <span className="truncate">{item.topic}</span>
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
 
           <div className="sidebar-label topics-label">POPULAR TOPICS</div>
           <div className="topic-list">
@@ -778,6 +854,7 @@ function TutorPage() {
                   void refreshBackendState();
                 }}
                 onSelectDocumentForChat={handleSelectDocForChat}
+                onSelectTopicForChat={handleSelectTopicWithDoc}
                 selectedDocumentId={selectedDocId || undefined}
               />
             )}

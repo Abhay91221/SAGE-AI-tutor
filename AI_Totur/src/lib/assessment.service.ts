@@ -8,6 +8,7 @@ import {
   StudentAnswer,
 } from "./tutor.types";
 import { ProfileService } from "./profile.service";
+import { RAGService } from "./rag.service";
 
 /**
  * Service for Quiz Generation, Semantic Answer Evaluation, and Misconception Detection.
@@ -279,32 +280,72 @@ export class AssessmentService {
     }
 
     if (questions.length === 0) {
-      questions = [
-        {
-          id: `q_gen_1_${Date.now()}`,
-          topic,
-          question: `What is the primary motivation or goal behind studying ${topic}?`,
-          questionType: "mcq",
-          options: [
-            `To model practical relationships and solve real-world domain challenges`,
-            `To randomly manipulate numbers without clear objectives`,
-            `To avoid testing or evaluating performance outcomes`,
-            `To arbitrarily increase computational complexity`,
-          ],
-          correctAnswer: `To model practical relationships and solve real-world domain challenges`,
-          explanation: `${topic} provides structured problem-solving principles tailored to real-world tasks.`,
-          difficulty: level,
-        },
-        {
-          id: `q_gen_2_${Date.now()}`,
-          topic,
-          question: `In your own words, what is the most important concept to grasp when first learning ${topic}?`,
-          questionType: "short_answer",
-          correctAnswer: `Understanding its core purpose, underlying assumptions, and how it transforms input information.`,
-          explanation: `A solid grasp of the core intuition enables you to apply ${topic} reliably across diverse scenarios.`,
-          difficulty: level,
-        },
-      ];
+      // Check if we have uploaded study material chunks for this topic
+      const ragResults = RAGService.searchContext(topic, undefined, 2);
+      if (ragResults.length > 0 && ragResults[0]?.chunk.text) {
+        const chunk = ragResults[0].chunk;
+        const sentences = chunk.text
+          .split(/(?<=[.!?])\s+/)
+          .map((s) => s.trim())
+          .filter((s) => s.length > 20 && !/^Page\s+\d+$/i.test(s));
+
+        const fact1 = sentences[0] || `${topic} defines structured rules for problem solving.`;
+        const fact2 = sentences[1] || `${topic} establishes trade-offs and operational bounds.`;
+
+        questions = [
+          {
+            id: `q_rag_1_${Date.now()}`,
+            topic,
+            question: `According to your study notes in ${chunk.documentName}, which statement accurately describes ${topic}?`,
+            questionType: "mcq",
+            options: [
+              fact1,
+              `A random operation with no relation to ${topic}`,
+              `An obsolete method with no real-world application`,
+              `A technique that ignores input parameters entirely`,
+            ],
+            correctAnswer: fact1,
+            explanation: `Your study notes state: "${fact1}" [Source: ${chunk.documentName}]`,
+            difficulty: level,
+          },
+          {
+            id: `q_rag_2_${Date.now()}`,
+            topic,
+            question: `Based on your uploaded material, explain the main mechanism or purpose of ${topic}:`,
+            questionType: "short_answer",
+            correctAnswer: fact2,
+            explanation: `From your notes in ${chunk.documentName}: "${fact2}"`,
+            difficulty: level,
+          },
+        ];
+      } else {
+        questions = [
+          {
+            id: `q_gen_1_${Date.now()}`,
+            topic,
+            question: `What is the primary motivation or goal behind studying ${topic}?`,
+            questionType: "mcq",
+            options: [
+              `To model practical relationships and solve real-world domain challenges`,
+              `To randomly manipulate numbers without clear objectives`,
+              `To avoid testing or evaluating performance outcomes`,
+              `To arbitrarily increase computational complexity`,
+            ],
+            correctAnswer: `To model practical relationships and solve real-world domain challenges`,
+            explanation: `${topic} provides structured problem-solving principles tailored to real-world tasks.`,
+            difficulty: level,
+          },
+          {
+            id: `q_gen_2_${Date.now()}`,
+            topic,
+            question: `In your own words, what is the most important concept to grasp when first learning ${topic}?`,
+            questionType: "short_answer",
+            correctAnswer: `Understanding its core purpose, underlying assumptions, and how it transforms input information.`,
+            explanation: `A solid grasp of the core intuition enables you to apply ${topic} reliably across diverse scenarios.`,
+            difficulty: level,
+          },
+        ];
+      }
     }
 
     if (questions.length < 3) {

@@ -47,6 +47,8 @@ export interface StudyMaterial {
   uploadDate: string;
   chunksCount: number;
   chunks: DocumentChunk[];
+  topics?: string[];
+  summary?: string;
 }
 
 export interface QuizQuestion {

@@ -8,6 +8,7 @@ import {
   Award,
   Sparkles,
   HelpCircle,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Level, Quiz, QuizAttemptResult, StudentAnswer } from "@/lib/tutor.types";
@@ -124,7 +125,9 @@ export function AdaptiveQuizView({
                   type="text"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  placeholder="e.g. Linear & Logistic Regression"
+                  className="w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-black placeholder:text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-ring shadow-sm"
+                  style={{ color: "#000000", backgroundColor: "#ffffff" }}
                 />
               </div>
 
@@ -153,10 +156,20 @@ export function AdaptiveQuizView({
             <Button
               onClick={handleStartQuiz}
               disabled={loading || !topic.trim()}
-              className="feature-cta"
+              className="quiz-action-button"
             >
-              {loading ? "Generating Quiz Questions..." : "Generate Adaptive Quiz"}{" "}
-              <ArrowRight size={17} />
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Generating Adaptive Questions...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>Generate Adaptive Quiz</span>
+                  <ArrowRight size={16} />
+                </>
+              )}
             </Button>
           </div>
         </section>
@@ -241,7 +254,8 @@ export function AdaptiveQuizView({
                       rows={3}
                       value={answers[q.id] || ""}
                       onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                      className="w-full rounded-md border border-input bg-background p-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      className="w-full rounded-md border border-input bg-white p-3 text-sm text-black placeholder:text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-ring shadow-sm"
+                      style={{ color: "#000000", backgroundColor: "#ffffff" }}
                     />
                   </div>
                 )}
@@ -250,11 +264,21 @@ export function AdaptiveQuizView({
           </div>
 
           <div className="flex items-center justify-between pt-4 border-t border-border">
-            <Button type="button" variant="outline" onClick={resetQuiz}>
+            <Button type="button" variant="outline" onClick={resetQuiz} className="h-10 px-5 text-sm font-medium">
               Cancel
             </Button>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Evaluating Answers..." : "Submit Quiz for Evaluation"}
+            <Button type="submit" disabled={submitting} className="quiz-submit-button">
+              {submitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Evaluating Answers...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 size={16} />
+                  <span>Submit Quiz for Evaluation</span>
+                </>
+              )}
             </Button>
           </div>
         </form>
@@ -371,11 +395,11 @@ export function AdaptiveQuizView({
             ))}
           </div>
 
-          <div className="flex gap-4">
-            <Button onClick={resetQuiz} variant="outline" className="gap-2">
+          <div className="flex flex-wrap gap-4">
+            <Button onClick={resetQuiz} variant="outline" className="gap-2 h-10 px-5 text-sm font-medium">
               <RotateCcw size={16} /> Take Another Quiz
             </Button>
-            <Button onClick={handleStartQuiz} className="gap-2">
+            <Button onClick={handleStartQuiz} className="quiz-action-button">
               <Sparkles size={16} /> Retry This Topic
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import { Level, Mode } from "./tutor.types";
+import { DocumentChunk, Level, Mode } from "./tutor.types";
 import { ProfileService } from "./profile.service";
 import { RAGService } from "./rag.service";
 import { AssessmentService } from "./assessment.service";
@@ -49,7 +49,7 @@ export class AgentOrchestrator {
     });
 
     // 2. Tool Call: search_study_material (RAG Context)
-    const { contextPrompt, citations } = RAGService.buildAugmentedContext(
+    const { contextPrompt, citations, relevantChunks } = RAGService.buildAugmentedContext(
       lastUserMessage || req.topic,
       req.documentId,
     );
@@ -101,13 +101,24 @@ export class AgentOrchestrator {
     let answer = await AgentOrchestrator.callLLMGateway(systemPrompt, req.messages);
 
     if (!answer) {
-      answer = AgentOrchestrator.generateLocalFallback(
-        req.topic,
-        req.level,
-        req.mode,
-        lastUserMessage,
-        citations,
-      );
+      if (relevantChunks && relevantChunks.length > 0) {
+        answer = AgentOrchestrator.synthesizeRAGAnswer(
+          lastUserMessage,
+          req.topic,
+          req.level,
+          req.mode,
+          relevantChunks,
+          citations,
+        );
+      } else {
+        answer = AgentOrchestrator.generateLocalFallback(
+          req.topic,
+          req.level,
+          req.mode,
+          lastUserMessage,
+          citations,
+        );
+      }
     }
 
     // Append citation footer if RAG was used and answer doesn't include it
@@ -236,6 +247,121 @@ WRITING & TONE GUIDELINES (STRICTLY REQUIRED):
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Synthesizes an intelligent pedagogical answer grounded directly in uploaded RAG chunks.
+   * Ensures accurate answers even without external LLM API keys.
+   */
+  public static synthesizeRAGAnswer(
+    userQuery: string,
+    topic: string,
+    level: Level,
+    mode: Mode,
+    chunks: DocumentChunk[],
+    citations: string[],
+  ): string {
+    const docName = chunks[0]?.documentName || "your study material";
+    const primaryCitation = citations[0] || `[Source: ${docName}]`;
+    const combinedChunkText = chunks.map((c) => c.text).join("\n\n");
+
+    // Split into logical blocks, grouping lines ending in colons with their values/equations
+    const rawLines = combinedChunkText
+      .split(/\r?\n+/)
+      .map((l) => l.trim())
+      .filter((l) => l.length > 5 && !/^Page\s+\d+$/i.test(l));
+
+    const groupedUnits: string[] = [];
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i]!;
+      if (line.endsWith(":") && i + 1 < rawLines.length) {
+        groupedUnits.push(`${line} ${rawLines[i + 1]}`);
+        i++;
+      } else {
+        groupedUnits.push(line);
+      }
+    }
+
+    const queryWords = (userQuery || topic)
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .split(/\s+/)
+      .filter((w) => w.length > 2);
+
+    const isFormulaQuery =
+      /formula|equation|math|chemical|calculate|symbol/i.test(userQuery) || mode === "Show Formula";
+
+    // Score units by relevance
+    const scoredUnits = groupedUnits.map((unit) => {
+      let score = 0;
+      const uLower = unit.toLowerCase();
+      for (const w of queryWords) {
+        if (uLower.includes(w)) score += 4;
+      }
+      if (topic && uLower.includes(topic.toLowerCase())) score += 5;
+      if (isFormulaQuery && (/[=<>+\-*/^]|->|\bsigma\b|\bfrac\b/i.test(unit) || uLower.includes("equation"))) {
+        score += 8;
+      }
+      return { unit, score };
+    });
+
+    scoredUnits.sort((a, b) => b.score - a.score);
+    const topUnits = scoredUnits
+      .filter((u) => u.score > 0)
+      .slice(0, 5)
+      .map((u) => u.unit);
+
+    const coreExcerpts = topUnits.length > 0 ? topUnits : groupedUnits.slice(0, 4);
+    const mainIdea = coreExcerpts.join("\n\n");
+
+    // Mode-specific pedagogical synthesis
+    if (mode === "Quiz me") {
+      const targetFact = coreExcerpts[0] || combinedChunkText.slice(0, 100);
+      return `Based on your notes in ${docName}:\n\nHere is a check on your understanding:\n\nReviewing the core material: "${targetFact}"\n\nHow would you summarize the main mechanism or principle here in your own words, and why is it important?\n\nTake your best shot!`;
+    }
+
+    if (mode === "Give Hint") {
+      const hintFact = coreExcerpts[0] || "Review the key relationships in your uploaded notes.";
+      return `Here is a helpful hint grounded in ${docName}:\n\nHint: ${hintFact}\n\nNotice how this foundational rule dictates the behavior you are trying to understand.`;
+    }
+
+    if (mode === "Show Formula") {
+      const formulaLines = groupedUnits.filter((s) =>
+        /[=<>+\-*/^]|->|\bsigma\b|\bfrac\b|\bmin\b|\bmax\b|\bsum\b|\bprob\b/i.test(s),
+      );
+
+      if (formulaLines.length > 0) {
+        return `Here are the key formulas and formal definitions from ${docName}:\n\n${formulaLines.map((fl) => `- ${fl}`).join("\n")}\n\nThese equations define the exact mathematical and algorithmic mechanics outlined in your material.`;
+      }
+      return `Here are the foundational principles and formal rules from ${docName}:\n\n${coreExcerpts.map((ce, i) => `${i + 1}. ${ce}`).join("\n")}\n\nWhich of these definitions or equations would you like to unpack further?`;
+    }
+
+    if (mode === "Step-by-Step") {
+      return `Here is the step-by-step breakdown directly from ${docName}:\n\n${coreExcerpts
+        .slice(0, 4)
+        .map((step, idx) => `${idx + 1}. ${step}`)
+        .join("\n\n")}\n\nEach step builds on the previous one. Does this sequential flow make sense?`;
+    }
+
+    if (mode === "Give an example") {
+      return `Here is a practical perspective grounded in ${docName}:\n\n${mainIdea}\n\nWhen applying this in practice, you take the inputs and preconditions described in your material and trace how they produce the target outcome.\n\nWould you like to walk through a concrete scenario or calculation for this?`;
+    }
+
+    if (mode === "Real-Life Analogy") {
+      return `To make the concepts in ${docName} intuitive:\n\n${mainIdea}\n\nThink of this like a precision blueprint or recipe: each parameter and condition must be set deliberately, otherwise the final result will deviate from what is intended.\n\nDoes that mental picture help clarify the concept?`;
+    }
+
+    // Default: "Explain"
+    let levelLead = "";
+    if (level === "Beginner") {
+      levelLead = `In simple, clear terms from your uploaded notes (${docName}):\n\n${mainIdea}`;
+    } else if (level === "Advanced") {
+      levelLead = `Examining the technical mechanics outlined in ${docName}:\n\n${mainIdea}\n\nNotice how the underlying logic addresses edge cases and operational constraints.`;
+    } else {
+      levelLead = `Here is the explanation grounded directly in your notes (${docName}):\n\n${mainIdea}`;
+    }
+
+    return `${levelLead}\n\nQuick check to test your understanding: based on this concept from your notes, what is the most important factor or trade-off to keep in mind?`;
   }
 
   private static generateLocalFallback(
