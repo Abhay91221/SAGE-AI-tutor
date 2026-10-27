@@ -3,6 +3,7 @@ import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { AgentOrchestrator, type AgentRequest } from "./lib/agent.orchestrator";
 import { SupabaseDataService } from "./lib/supabase-data.service";
+import { AuthService } from "./lib/auth.service";
 import type { Level, Mode } from "./lib/tutor.types";
 
 type ServerEntry = {
@@ -50,6 +51,12 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
+
+      // Handle Authentication Endpoints (/api/auth/*)
+      const authResponse = await AuthService.handleRequest(request);
+      if (authResponse) {
+        return authResponse;
+      }
 
       // Handle REST API Endpoint: /api/tutor (as specified in Project Overview)
       if (url.pathname === "/api/tutor") {

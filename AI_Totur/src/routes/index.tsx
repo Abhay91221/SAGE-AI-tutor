@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
@@ -9,6 +9,7 @@ import {
   Compass,
   GraduationCap,
   Lightbulb,
+  LogOut,
   Menu,
   MessageCircle,
   Plus,
@@ -33,6 +34,7 @@ import { AdaptiveQuizView } from "@/components/tutor/AdaptiveQuizView";
 import { ProgressDashboardView } from "@/components/tutor/ProgressDashboardView";
 import { StudyPlannerView } from "@/components/tutor/StudyPlannerView";
 import { StudentProfileModal } from "@/components/tutor/StudentProfileModal";
+import { useAuth } from "@/hooks/use-auth";
 import type { AgentResponse } from "@/lib/agent.orchestrator";
 import {
   Level,
@@ -146,6 +148,9 @@ const actionChips: { label: string; mode: Mode; text: string }[] = [
 ];
 
 function TutorPage() {
+  const navigate = useNavigate();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
+
   const [activeView, setActiveView] = useState<ViewMode>("chat");
   const [topic, setTopic] = useState<string>("Linear & Logistic Regression");
   const [level, setLevel] = useState<Level>("Beginner");
@@ -185,6 +190,15 @@ function TutorPage() {
   });
   const [selectedDocId, setSelectedDocId] = useState<string | undefined>(undefined);
   const [selectedDocName, setSelectedDocName] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (user?.name) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.name,
+      }));
+    }
+  }, [user]);
 
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -500,19 +514,56 @@ function TutorPage() {
         </div>
 
         <div
-          className="sidebar-footer"
-          onClick={() => setProfileModalOpen(true)}
+          className="sidebar-footer flex items-center justify-between"
+          onClick={() => {
+            if (isAuthenticated) {
+              setProfileModalOpen(true);
+            } else {
+              navigate({ to: "/login", search: { redirect: "/" } });
+            }
+          }}
           style={{ cursor: "pointer" }}
         >
-          <div className="footer-icon">
-            <GraduationCap size={21} />
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="footer-icon shrink-0">
+              <GraduationCap size={21} />
+            </div>
+            <div className="min-w-0">
+              <strong className="block truncate">
+                {isAuthenticated ? (user?.name || profile.name) : "Guest Learner"}
+              </strong>
+              <span className="block text-xs text-muted-foreground truncate">
+                {isAuthenticated
+                  ? user?.email || `${level} • Click to edit profile`
+                  : "Sign in to save your learning history"}
+              </span>
+            </div>
           </div>
-          <div>
-            <strong>{profile.name}</strong>
-            <span className="block text-xs text-muted-foreground">
-              {level} • Click to edit profile
-            </span>
-          </div>
+          {isAuthenticated ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                logout();
+              }}
+              title="Logout"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+              id="sidebar-logout-button"
+            >
+              <LogOut size={15} />
+            </Button>
+          ) : (
+            <Link
+              to="/login"
+              search={{ redirect: "/" }}
+              onClick={(e) => e.stopPropagation()}
+              className="text-xs text-primary font-medium hover:underline shrink-0 px-2 py-1"
+              id="sidebar-login-link"
+            >
+              Log In
+            </Link>
+          )}
         </div>
       </aside>
 
@@ -536,7 +587,7 @@ function TutorPage() {
             <span className="breadcrumb-current capitalize">{activeView}</span>
           </div>
 
-          <div className="topbar-right">
+          <div className="topbar-right flex items-center gap-2.5">
             {selectedDocName && (
               <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium flex items-center gap-1">
                 <FileText size={13} /> RAG Source: {selectedDocName}
@@ -544,13 +595,57 @@ function TutorPage() {
             )}
             <span className="status-dot" /> SAGE Ready
             <span className="header-divider" />
-            <button
-              onClick={() => setProfileModalOpen(true)}
-              className="avatar hover:ring-2 hover:ring-primary transition-all"
-              title="Edit Profile"
-            >
-              {profile.name.charAt(0)}
-            </button>
+
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <div className="hidden md:flex flex-col text-right leading-tight">
+                  <span className="text-xs font-medium text-foreground">
+                    Welcome, {user?.name || profile.name}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground font-mono">
+                    {user?.role ? user.role.toUpperCase() : "STUDENT"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setProfileModalOpen(true)}
+                  className="avatar hover:ring-2 hover:ring-primary transition-all font-semibold"
+                  title={`Logged in as ${user?.name || profile.name}`}
+                  id="user-profile-button"
+                >
+                  {(user?.name || profile.name).charAt(0).toUpperCase()}
+                </button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => logout()}
+                  className="text-xs h-8 text-muted-foreground hover:text-destructive hover:border-destructive/30 gap-1.5 px-2.5"
+                  title="Logout"
+                  id="logout-button"
+                >
+                  <LogOut size={14} />
+                  <span className="hidden sm:inline">Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2" id="auth-nav-buttons">
+                <Link
+                  to="/login"
+                  search={{ redirect: "/" }}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                  id="nav-login-button"
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/register"
+                  search={{ redirect: "/" }}
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+                  id="nav-signup-button"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </header>
 

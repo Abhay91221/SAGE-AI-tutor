@@ -1,0 +1,29 @@
+[
+  {
+    "id": "usr_demo_sage",
+    "name": "Alex Morgan",
+    "email": "demo@sage.edu",
+    "role": "student",
+    "passwordHash": "$2b$10$mk/PP9a2FcYgYfbbNUYABeUisq.TmJoP7R41l1jYQ87/eD/h5w1xe",
+    "createdAt": "2026-10-27T08:23:08.989Z",
+    "updatedAt": "2026-10-27T08:23:08.989Z"
+  },
+  {
+    "id": "usr_1793089389215_mni7i",
+    "name": "Jordan Lee",
+    "email": "student_1793089389128@university.edu",
+    "role": "student",
+    "passwordHash": "$2b$10$NkQHT4ezfThlD6hRmwG14uzaVGRNZy6mTmj2dh.Ger7IpEZtySYpG",
+    "createdAt": "2026-10-27T08:23:09.215Z",
+    "updatedAt": "2026-10-27T08:23:09.432Z"
+  },
+  {
+    "id": "usr_1793089748322_5pswq",
+    "name": "Abhay Singh",
+    "email": "abhaysingh3485@gmail.com",
+    "role": "student",
+    "passwordHash": "$2b$10$FNlGZk54De5j8zMoKwFwPOpdEXpxhqTTHRDbXzeXfeiQo1q40/f6e",
+    "createdAt": "2026-10-27T08:29:08.322Z",
+    "updatedAt": "2026-10-27T08:29:08.322Z"
+  }
+]
